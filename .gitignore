@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+*.spec
+
+# Videos and everything the app writes next to them - never commit these
+*.mov
+*.MOV
+*.mp4
+*.m4v
+*.avi
+*.mkv
+*.session.json
+*.settings.json
+*.batch.json
+*.shots.csv
+*_summary.csv
+*.report.html
+*_report.html
+settings.json
+
+# Editors / OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hive-shot-lab"
+dynamic = ["version"]
+description = "Measure FTC BIOBUZZ pollen shots from slow-motion video: launch speed, angle, and IN / LOW / HIGH at the hive cell."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md"]
+authors = [{ name = "Bolton Robotics FTC (team 36563 Prime Symmetry)" }]
+requires-python = ">=3.10"
+dependencies = [
+    "opencv-python-headless>=4.9",
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "pandas>=2.1",
+    "matplotlib>=3.9",
+    "PySide6>=6.6",
+]
+keywords = ["FTC", "FIRST Tech Challenge", "robotics", "AprilTag", "video analysis", "ballistics"]
+
+[project.urls]
+Homepage = "https://github.com/boltonftc/hive-shot-lab"
+
+[project.gui-scripts]
+hive-shot-lab = "hive_shot_lab.app:main"
+
+[tool.setuptools]
+packages = ["hive_shot_lab"]
+
+[tool.setuptools.package-data]
+hive_shot_lab = ["branding/*.png"]
+
+[tool.setuptools.dynamic]
+version = { attr = "hive_shot_lab.__version__" }

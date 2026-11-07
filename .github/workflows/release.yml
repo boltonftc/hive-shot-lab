@@ -1,0 +1,78 @@
+name: Windows download
+
+# Tag a version (git tag v1.0.0 && git push origin v1.0.0) to build the Windows zip and attach it to a DRAFT
+# release; review the draft on GitHub and press Publish. "Run workflow" builds the zip only (as an artifact).
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install . pyinstaller pip-licenses
+
+      - name: Check the app imports
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -c "import hive_shot_lab.window, hive_shot_lab.app; print('ok')"
+
+      - name: Icon
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          New-Item -ItemType Directory -Force build | Out-Null
+          python -c "from PySide6.QtGui import QGuiApplication, QImage; from PySide6.QtCore import Qt; a = QGuiApplication([]); QImage('hive_shot_lab/branding/prime_symmetry_icon_36563.png').scaled(256, 256, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation).save('build/hive_shot_lab.ico')"
+
+      - name: Build
+        run: >
+          pyinstaller --noconfirm --clean --windowed --name HiveShotLab
+          --icon build/hive_shot_lab.ico
+          --collect-data hive_shot_lab
+          --exclude-module tkinter
+          hive_shot_lab/__main__.py
+
+      - name: Licenses and docs
+        run: |
+          $out = "dist/HiveShotLab"
+          Copy-Item LICENSE, NOTICE, THIRD_PARTY_NOTICES.md, README.md $out
+          pip-licenses --with-license-file --no-license-path --format=plain-vertical --output-file "$out/THIRD_PARTY_LICENSES.txt"
+          $cv = python -c "import cv2, os; print(os.path.dirname(cv2.__file__))"
+          Copy-Item "$cv/LICENSE-3RD-PARTY.txt" "$out/OPENCV_THIRD_PARTY_LICENSES.txt"
+
+      - name: Zip
+        id: zip
+        run: |
+          $name = if ($env:GITHUB_REF_TYPE -eq "tag") { $env:GITHUB_REF_NAME } else { "dev" }
+          $zip = "HiveShotLab-$name-windows.zip"
+          Compress-Archive -Path dist/HiveShotLab -DestinationPath $zip
+          "zip=$zip" >> $env:GITHUB_OUTPUT
+
+      - name: Upload (manual runs)
+        if: github.ref_type != 'tag'
+        uses: actions/upload-artifact@v4
+        with:
+          name: HiveShotLab-windows
+          path: ${{ steps.zip.outputs.zip }}
+
+      - name: Draft release (tags)
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          gh release create $env:GITHUB_REF_NAME "${{ steps.zip.outputs.zip }}"
+          --draft --title "Hive Shot Lab $env:GITHUB_REF_NAME"
+          --notes "Windows: download the zip, unzip it anywhere, and run HiveShotLab.exe inside the HiveShotLab folder. Windows may say 'Windows protected your PC' because the program isn't signed: click More info, then Run anyway. Mac / Linux: run from source (see the README)."

@@ -1,0 +1,43 @@
+Hive Shot Lab
+Copyright 2026 Bolton Robotics FTC
+
+This product was created by FIRST Tech Challenge team 36563 Prime Symmetry
+(Bolton Robotics FTC) to measure BIOBUZZ pollen shots from slow-motion video:
+launch speed, launch angle, and where each ball reaches the hive cell.
+
+ATTRIBUTION REQUIREMENT
+=======================
+If you use, modify, or redistribute this software — in whole or in part —
+you must give clear credit to Bolton Robotics FTC as the original author.
+This includes, but is not limited to:
+
+  - Keeping this NOTICE file intact in any distribution
+  - Displaying "Created by Bolton Robotics FTC" in any splash screen,
+    about page, or credits section of derivative works
+  - Including attribution in any accompanying documentation
+
+This requirement is part of the Apache License, Version 2.0 under which
+this software is distributed. See the LICENSE file for full terms.
+
+THIRD-PARTY COMPONENTS
+======================
+This project uses the following third-party components, each distributed
+under its own license. Their use does not transfer their copyright, and their
+respective licenses continue to govern their use. See THIRD_PARTY_NOTICES.md.
+
+  - OpenCV (opencv-python-headless) — Apache License 2.0. https://opencv.org/
+    Includes FFmpeg (LGPL 2.1, https://ffmpeg.org/) for video decoding.
+  - AprilTag (APRIL Robotics Laboratory, University of Michigan) — BSD 2-Clause.
+    Tag family and detection method used through OpenCV. https://april.eecs.umich.edu/software/apriltag
+  - Qt for Python (PySide6), The Qt Company — LGPL v3. https://www.qt.io/qt-for-python
+  - NumPy — BSD 3-Clause. https://numpy.org/
+  - SciPy — BSD 3-Clause. https://scipy.org/
+  - pandas — BSD 3-Clause. https://pandas.pydata.org/
+  - Matplotlib — Matplotlib License (PSF-based). https://matplotlib.org/
+  - PyInstaller (Windows download only) — GPL 2 with the bootloader exception.
+    https://pyinstaller.org/
+
+FIRST® and FIRST® Tech Challenge are registered trademarks of FIRST® (For
+Inspiration and Recognition of Science and Technology), which is not
+overseeing, involved with, or responsible for this software. BIOBUZZ and
+DECODE are FIRST® game names, used only to say which game this tool is for.
